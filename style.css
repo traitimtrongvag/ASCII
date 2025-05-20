@@ -1,51 +1,61 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
 body {
+  padding: 2rem 3rem;
+  font-family: 'Courier New', monospace;
   background-color: #f2f2f2;
-  font-family: Arial, sans-serif;
+  color: #222;
+  line-height: 1.5rem;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+header {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  margin: 0;
+  margin-bottom: 2rem;
 }
 
-.container {
-  background: #ffffff;
-  padding: 20px 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  max-width: 90vw;
-  width: 600px;
-}
-
-h1 {
+header h1 {
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-right: 1rem;
   color: #333;
 }
 
-#imageInput {
-  margin-bottom: 20px;
-  padding: 8px;
-  font-size: 14px;
+input[type="file"] {
+  margin-top: 1.5rem;
+  font-size: 16px;
+  padding: 6px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-#asciiOutput {
+pre {
+  background-color: #000;
+  color: #fff;
+  padding: 1rem;
+  margin-top: 2rem;
   white-space: pre-wrap;
-  background-color: #000000;
-  color: #ffffff;
-  padding: 15px;
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+  line-height: 1;
   border-radius: 5px;
   max-height: 60vh;
   overflow-y: auto;
-  font-family: monospace;
-  font-size: 10px;
-  text-align: left;
-  line-height: 1.1;
-  margin-top: 10px;
-  box-shadow: inset 0 0 5px rgba(255,255,255,0.1);
+  width: 100%;
 }
 
-canvas {
-  display: none;
+footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 1rem;
+  font-size: 14px;
+  color: #555;
 }

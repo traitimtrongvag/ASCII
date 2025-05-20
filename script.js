@@ -71,6 +71,18 @@ const getCharacterForGrayScale = grayScale => grayRamp[Math.floor((grayScale / 2
 const drawAscii = (grayScales, width) => { const ascii = grayScales.reduce((asciiImage, grayScale, index) => { let nextChars = getCharacterForGrayScale(grayScale); if ((index + 1) % width === 0) { nextChars += '\n'; } return asciiImage + nextChars; }, '');
 
 asciiImage.textContent = ascii;
+const copyButton = document.getElementById('copyButton');
 
+copyButton.addEventListener('click', () => {
+    const asciiText = asciiImage.textContent;
+
+    navigator.clipboard.writeText(asciiText).then(() => {
+        copyButton.textContent = 'Đã sao chép!';
+        setTimeout(() => copyButton.textContent = 'Sao chép', 2000);
+    }).catch(err => {
+        console.error('Lỗi khi sao chép:', err);
+        copyButton.textContent = 'Lỗi sao chép';
+    });
+});
 };
 

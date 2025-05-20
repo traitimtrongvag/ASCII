@@ -1,12 +1,11 @@
-/* Reset và biến CSS */
 :root {
-  --primary-color: #4361ee;
-  --secondary-color: #3f37c9;
-  --accent-color: #4895ef;
-  --light-color: #f8f9fa;
-  --dark-color: #212529;
-  --border-radius: 8px;
-  --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --primary: #5e35b1;
+  --secondary: #3949ab;
+  --accent: #7c4dff;
+  --background: #f5f3ff;
+  --text: #1a237e;
+  --card: #ffffff;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -15,94 +14,121 @@
   box-sizing: border-box;
 }
 
-/* Phông chữ dự phòng */
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-
 body {
-  font-family: 'VT323', 'Courier New', monospace;
+  padding: 2rem 3rem;
+  font-family: 'VT323', monospace;
   line-height: 1.6;
   font-size: 20px;
-  background-color: #f5f7ff;
-  color: var(--dark-color);
-  padding: 20px;
+  background-color: var(--background);
+  color: var(--text);
   min-height: 100vh;
+  position: relative;
 }
 
-/* Header */
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px;
-  background-color: white;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  margin-bottom: 30px;
+  padding: 1rem 1.5rem;
+  background-color: var(--card);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
 }
 
 header h1 {
-  color: var(--primary-color);
+  margin-right: 1.5rem;
+  color: var(--primary);
   font-size: 2.2rem;
+  letter-spacing: 1px;
 }
 
-/* Form input */
 .input-container {
-  margin: 25px 0;
-  width: 100%;
-  max-width: 600px;
+  position: relative;
+  max-width: 800px;
+  margin: 2rem 0;
 }
 
 input {
   width: 100%;
-  padding: 12px 15px;
+  padding: 0.8rem 1rem;
   font-size: 1.1rem;
-  border: 2px solid #ddd;
-  border-radius: var(--border-radius);
-  font-family: inherit;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: var(--card);
   transition: all 0.3s ease;
+  font-family: inherit;
 }
 
 input:focus {
   outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
 }
 
-/* Kết quả hiển thị */
+/* Giữ nguyên phần hiển thị ASCII */
 pre {
   font-family: 'Courier New', monospace;
   margin: 1rem auto;
   font-size: 8px;
   line-height: 1;
-  
 }
-/* Footer */
+
 footer {
+  position: fixed;
+  bottom: 1rem;
+  left: 3rem;
+  right: 3rem;
   text-align: center;
-  margin-top: 40px;
-  padding: 15px;
-  color: #666;
-  font-size: 0.9rem;
+  padding: 0.5rem;
+  background-color: var(--card);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+/* Nút và các yếu tố tương tác */
+.button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.button:hover {
+  background-color: var(--secondary);
+  transform: translateY(-2px);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   body {
-    padding: 15px;
-    font-size: 18px;
+    padding: 1.5rem;
   }
   
   header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
+    gap: 1rem;
   }
   
-  header h1 {
-    font-size: 1.8rem;
+  footer {
+    left: 1.5rem;
+    right: 1.5rem;
   }
-  
-  input {
-    font-size: 1rem;
-  }
+}
+
+/* Hiệu ứng tải */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+body {
+  animation: fadeIn 0.5s ease-out;
 }

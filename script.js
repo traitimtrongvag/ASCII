@@ -1,78 +1,102 @@
-const canvas = document.getElementById('canvas'); const fileInput = document.getElementById('imageInput'); const asciiImage = document.getElementById('asciiOutput');
+const canvas = document.getElementById('canvas');
+const fileInput = document.getElementById('imageInput');
+const asciiImage = document.getElementById('asciiOutput');
+const copyButton = document.getElementById('copyButton');
 
 const context = canvas.getContext('2d');
 
 const toGrayScale = (r, g, b) => 0.21 * r + 0.72 * g + 0.07 * b;
 
-const getFontRatio = () => { const pre = document.createElement('pre'); pre.style.display = 'inline'; pre.textContent = ' '; document.body.appendChild(pre); const { width, height } = pre.getBoundingClientRect(); document.body.removeChild(pre); return height / width; };
+const getFontRatio = () => {
+    const pre = document.createElement('pre');
+    pre.style.display = 'inline';
+    pre.textContent = ' ';
+    document.body.appendChild(pre);
+    const { width, height } = pre.getBoundingClientRect();
+    document.body.removeChild(pre);
+    return height / width;
+};
 
 const fontRatio = getFontRatio();
 
-const convertToGrayScales = (context, width, height) => { const imageData = context.getImageData(0, 0, width, height); const grayScales = [];
+const convertToGrayScales = (context, width, height) => {
+    const imageData = context.getImageData(0, 0, width, height);
+    const grayScales = [];
 
-for (let i = 0; i < imageData.data.length; i += 4) {
-    const r = imageData.data[i];
-    const g = imageData.data[i + 1];
-    const b = imageData.data[i + 2];
-    const grayScale = toGrayScale(r, g, b);
-    imageData.data[i] = imageData.data[i + 1] = imageData.data[i + 2] = grayScale;
-    grayScales.push(grayScale);
-}
+    for (let i = 0; i < imageData.data.length; i += 4) {
+        const r = imageData.data[i];
+        const g = imageData.data[i + 1];
+        const b = imageData.data[i + 2];
+        const grayScale = toGrayScale(r, g, b);
+        imageData.data[i] = imageData.data[i + 1] = imageData.data[i + 2] = grayScale;
+        grayScales.push(grayScale);
+    }
 
-context.putImageData(imageData, 0, 0);
-return grayScales;
-
+    context.putImageData(imageData, 0, 0);
+    return grayScales;
 };
 
-const MAXIMUM_WIDTH = 100; const MAXIMUM_HEIGHT = 60;
+const MAXIMUM_WIDTH = 100;
+const MAXIMUM_HEIGHT = 60;
 
-const clampDimensions = (width, height) => { const rectifiedWidth = Math.floor(getFontRatio() * width);
+const clampDimensions = (width, height) => {
+    const rectifiedWidth = Math.floor(getFontRatio() * width);
 
-if (height > MAXIMUM_HEIGHT) {
-    const reducedWidth = Math.floor(rectifiedWidth * MAXIMUM_HEIGHT / height);
-    return [reducedWidth, MAXIMUM_HEIGHT];
-}
+    if (height > MAXIMUM_HEIGHT) {
+        const reducedWidth = Math.floor(rectifiedWidth * MAXIMUM_HEIGHT / height);
+        return [reducedWidth, MAXIMUM_HEIGHT];
+    }
 
-if (width > MAXIMUM_WIDTH) {
-    const reducedHeight = Math.floor(height * MAXIMUM_WIDTH / rectifiedWidth);
-    return [MAXIMUM_WIDTH, reducedHeight];
-}
+    if (width > MAXIMUM_WIDTH) {
+        const reducedHeight = Math.floor(height * MAXIMUM_WIDTH / rectifiedWidth);
+        return [MAXIMUM_WIDTH, reducedHeight];
+    }
 
-return [rectifiedWidth, height];
-
+    return [rectifiedWidth, height];
 };
 
-fileInput.onchange = (e) => { const file = e.target.files[0]; if (!file) return;
+fileInput.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-const reader = new FileReader();
-reader.onload = (event) => {
-    const image = new Image();
-    image.onload = () => {
-        const [width, height] = clampDimensions(image.width, image.height);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        const image = new Image();
+        image.onload = () => {
+            const [width, height] = clampDimensions(image.width, image.height);
 
-        canvas.width = width;
-        canvas.height = height;
+            canvas.width = width;
+            canvas.height = height;
 
-        context.drawImage(image, 0, 0, width, height);
-        const grayScales = convertToGrayScales(context, width, height);
+            context.drawImage(image, 0, 0, width, height);
+            const grayScales = convertToGrayScales(context, width, height);
 
-        drawAscii(grayScales, width);
+            drawAscii(grayScales, width);
+        };
+        image.src = event.target.result;
     };
-    image.src = event.target.result;
-};
-reader.readAsDataURL(file);
-
+    reader.readAsDataURL(file);
 };
 
-const grayRamp = '@#%*=+:-. '; const rampLength = grayRamp.length;
+const grayRamp = '@#%*=+:-. ';
+const rampLength = grayRamp.length;
 
-const getCharacterForGrayScale = grayScale => grayRamp[Math.floor((grayScale / 255) * (rampLength - 1))];
+const getCharacterForGrayScale = grayScale =>
+    grayRamp[Math.floor((grayScale / 255) * (rampLength - 1))];
 
-const drawAscii = (grayScales, width) => { const ascii = grayScales.reduce((asciiImage, grayScale, index) => { let nextChars = getCharacterForGrayScale(grayScale); if ((index + 1) % width === 0) { nextChars += '\n'; } return asciiImage + nextChars; }, '');
+const drawAscii = (grayScales, width) => {
+    const ascii = grayScales.reduce((asciiImage, grayScale, index) => {
+        let nextChars = getCharacterForGrayScale(grayScale);
+        if ((index + 1) % width === 0) {
+            nextChars += '\n';
+        }
+        return asciiImage + nextChars;
+    }, '');
 
-asciiImage.textContent = ascii;
-const copyButton = document.getElementById('copyButton');
+    asciiImage.textContent = ascii;
+};
 
+// Sự kiện sao chép (gán ngay khi trang tải)
 copyButton.addEventListener('click', () => {
     const asciiText = asciiImage.textContent;
 
@@ -84,5 +108,3 @@ copyButton.addEventListener('click', () => {
         copyButton.textContent = 'Lỗi sao chép';
     });
 });
-};
-
